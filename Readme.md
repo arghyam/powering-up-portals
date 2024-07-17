@@ -10,14 +10,14 @@
 
 - [Features](#features)
 - [Project Objectives](#project-objectives)
+- [High Level Approach](#high-level-approach)
 - [Technical Stack](#technical-stack)
 
 
 ## Features
 
 - **User Contributions**: Allow users to submit articles, events, opportunities, and translations.
-- **OAuth Authentication**: Secure login via OAuth 
-- **Role-Based Access Control**: Different user roles for content contribution and moderation.
+- **Post Contributions**: Posting User Generated Content on the India Water Portal Website.
 - **Enhanced UI/UX**: Intuitive and user-friendly interface for easy content submission.
 
 ## Project Objectives
@@ -25,16 +25,22 @@
 Our main goal is to empower users to share their expertise and insights on the India Water Portal. Specifically, we aim to:
 
 1. Enable users to contribute articles, events, opportunities, and translations.
-2. Simplify user login with existing accounts.
-3. Implement role-based access control to manage contributions and moderation effectively.
-4. Enhance the user interface to make it more user-friendly and intuitive.
+2. Enhance the user interface to make it more user-friendly and intuitive.
+3. The project acknowledges that there are challenges to address, such as ensuring the quality of user-generated content and making the login process smooth. Overall, the goal is to empower users and create a richer resource on water for everyone. 
 
 By fostering user engagement and collaboration, we hope to create a vibrant community that actively participates in water conservation efforts.
 
+## High Level Approach
+
+The project should be built with
+**Backend CMS** ->To post events and articles 
+**Page builder** ->Wordpress like software tool for frontend(No code)
+**Malibu** -> JS framework 
+**Metype** -> Comments and Login (RBAC) platform
+
 ## Technical Stack
 
-- **Frontend**: Next.js, React.js
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB, MySQL
-- **Authentication**: OAuth 
-- **Other Tools**:Content Management System (CMS)
+- **Frontend**: Page Builder
+- **Backend**: Bold Backend CMS
+- **Database**: Cloudfare DB managed by Quintype
+- **Other Tools**: Metype Forms, UGC
