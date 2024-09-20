@@ -1,12 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create UserContext
 export const UserContext = createContext();
 
-// Custom hook to use the user context
 export const useUser = () => useContext(UserContext);
 
-// UserProvider component to wrap the app and provide the user context
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,7 +11,7 @@ export const UserProvider = ({ children }) => {
   // Fetch user data
   const checkUserLogin = async () => {
     try {
-      const response = await fetch('https://indiawaterportal-demo.madrid.quintype.io/api/auth/v1/users/me', {
+      const response = await fetch('https://www.indiawaterportal.org/api/auth/v1/users/me', {
         credentials: 'include',
       });
       const data = await response.json();

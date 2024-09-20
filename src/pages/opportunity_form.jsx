@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import OpportunityDetails from '../components/opportunity_details';
-import JobSummary from '../components/job_summary';
-import Responsibilities from '../components/responsibilities';
-import SkillsQualifications from '../components/skillsqualification'
-import Compensation from '../components/compensation';
-import AdditionalInfo from '../components/additional_info';
+import OpportunityDetails from '../components/opportunity_components/opportunity_details';
+import JobSummary from '../components/opportunity_components/job_summary';
+import Responsibilities from '../components/opportunity_components/responsibilities';
+import SkillsQualifications from '../components/opportunity_components/skillsqualification';
+import Compensation from '../components/opportunity_components/compensation';
+import AdditionalInfo from '../components/opportunity_components/additional_opinfo';
 
 const OpportunityForm = () => {
   const [formData, setFormData] = useState({

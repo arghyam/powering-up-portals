@@ -1,92 +1,136 @@
-import React from 'react';
-import FormHeader from '../components/formHeader';
-import EventDetails from '../components/event_details';
-import EventObjective from '../components/event_ojective';
-import TargetAudience from '../components/target_audience';
-import WorkshopContent from '../components/workshop_content';
-import ResourcePerson from '../components/resource_person';
-import ParticipationFees from '../components/participation_fees';
-import ContactInfo from '../components/contact_info';
-import AdditionalInfo from '../components/additional_info';
-import SubmitSection from '../components/submit_section';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../UserContext'; // Adjust the import path based on your file structure
 
-const EventForm = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert('Your event has been successfully submitted!');
+const UserContribution = () => {
+  const [selectedForm, setSelectedForm] = useState(null);
+  const navigate = useNavigate();
+  const { user, loading } = useUser(); // Destructure user and loading from context
+
+  // Function to return iframe source based on the selected form with dynamic topic_value
+  const getIframeSrc = () => {
+    const baseURL = "https://staging.metype.com//contribution-editor?account_id=1002996&amp;font_url=&amp;font_family=&amp;";
+    switch (selectedForm) {
+      case "event":
+        return `${baseURL}&topic_type=contribution&topic_value=event`;
+      case "article":
+        return `${baseURL}&topic_type=contribution&topic_value=article`;
+      case "opportunity":
+        return `${baseURL}&topic_type=contribution&topic_value=opportunity`;
+      default:
+        return "";
+    }
   };
 
+  useEffect(() => {
+    // Dynamically load the Metype script after component mount
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://www.metype.com/widget/v1.0/talktype.js';  // Path to the Metype talktype widget
+    script.async = true;
+    
+    script.onload = () => {
+      // Ensure Metype initializes after the script loads
+      if (window.talktype) {
+        window.talktype(() => {
+          window.talktype.contributionWidgetIframe(document.getElementById('contribution-container'));
+        });
+      }
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        maxWidth: '800px',
-        margin: '40px auto',
-        padding: '30px',
-        backgroundColor: '#e8f4f2', // Soft blue background for the form
-        borderRadius: '12px',
-        boxShadow: '0 2px 15px rgba(0, 0, 0, 0.1)',
-        fontFamily: 'Arial, sans-serif',
-        color: '#333', // Darker text for better contrast
-      }}
-    >
-      <FormHeader
-        title="Event Submission Form"
-        subtitle="Fill in the details to submit your event to our portal."
-        style={{
-          textAlign: 'center',
-          color: '#2b6777',
-          fontSize: '32px', // Larger font for better readability
-          marginBottom: '20px',
-        }}
-      />
-      <div style={{ color: '#52ab98', marginBottom: '20px' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '24px' }}>Event Details</h2>
-      </div>
-      <EventDetails />
-      <div style={{ color: '#52ab98', marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '20px', textAlign: 'center' }}>Event Objective</h3>
-      </div>
-      <EventObjective />
-      <div style={{ color: '#52ab98', marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '20px', textAlign: 'center' }}>Target Audience</h3>
-      </div>
-      <TargetAudience />
-      <div style={{ color: '#52ab98', marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '20px', textAlign: 'center' }}>Workshop Content</h3>
-      </div>
-      <WorkshopContent />
-      <div style={{ color: '#52ab98', marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '20px', textAlign: 'center' }}>Resource Person</h3>
-      </div>
-      <ResourcePerson />
-      <div style={{ color: '#52ab98', marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '20px', textAlign: 'center' }}>Participation Fees</h3>
-      </div>
-      <ParticipationFees />
-      <div style={{ color: '#52ab98', marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '20px', textAlign: 'center' }}>Contact Info</h3>
-      </div>
-      <ContactInfo />
-      <div style={{ color: '#4a4a4a', fontStyle: 'italic', marginBottom: '20px' }}>
-        <AdditionalInfo />
-      </div>
-      <div style={{ textAlign: 'center', marginTop: '30px' }}>
-        <SubmitSection
-          style={{
-            backgroundColor: '#2b6777',
-            color: 'white',
-            padding: '12px 24px',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontSize: '16px',
-          }}
-        />
-      </div>
-    </form>
+    <div style={{ textAlign: 'center', backgroundColor: '#c6f5ed', padding: '20px' }}>  
+      <h2 style={{ color: '#2b6777', margin: '40px 0 20px 0' }}>User Contributions</h2>
+      {user ? (
+        <>
+          <div style={{ marginBottom: "20px" }}>
+            <button onClick={() => setSelectedForm("event")} style={buttonStyle}>
+              Contribute an Event
+            </button>
+            <button onClick={() => setSelectedForm("article")} style={buttonStyle}>
+              Contribute an Article
+            </button>
+            <button onClick={() => setSelectedForm("opportunity")} style={buttonStyle}>
+              Contribute an Opportunity
+            </button>
+          </div>
+          <div style={{ marginBottom: "20px" }}>
+            <button onClick={() => navigate('/use')} style={buttonStyle}>
+              My Contribution
+            </button>
+          </div>
+          {selectedForm && (
+            <iframe
+              src={getIframeSrc()}
+              style={{ width: "100%", height: "600px", border: "none" }}
+              title="Metype Contribution Form"
+            ></iframe>
+          )}
+          {/* Metype container for contributions */}
+          <div id='contribution-container' data-metype-account-id='1003992' data-metype-host='https://www.metype.com/'></div>
+        </>
+      ) : (
+        <div>
+          <div style={{ marginBottom: "20px" }}>
+            <button onClick={() => setSelectedForm("event")} style={buttonStyle}>
+              Contribute an Event
+            </button>
+            <button onClick={() => setSelectedForm("article")} style={buttonStyle}>
+              Contribute an Article
+            </button>
+            <button onClick={() => setSelectedForm("opportunity")} style={buttonStyle}>
+              Contribute an Opportunity
+            </button>
+          </div>
+          <div style={{ marginBottom: "20px" }}>
+            <button onClick={() => navigate('/use')} style={largerButtonStyle}>
+              My Contributions
+            </button>
+          </div>
+          {selectedForm && (
+            <iframe
+              src={getIframeSrc()}
+              style={{ width: "100%", height: "600px", border: "none" }}
+              title="Metype Contribution Form"
+            ></iframe>
+          )}
+          {/* Metype container for contributions */}
+          <div id='contribution-container' data-metype-account-id='1003992' data-metype-host='https://www.metype.com/'></div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default EventForm;
+// Inline CSS for buttons
+const buttonStyle = {
+  marginRight: "10px",
+  padding: "15px 30px",  // Increased padding for bigger buttons
+  backgroundColor: "#00796b",
+  color: "#fff",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer",
+  fontSize: "18px",  // Increased font size
+};
+const largerButtonStyle = {
+  marginRight: "10px",
+  padding: "15px 30px",  // Increased padding for bigger buttons
+  backgroundColor: "#2b6777",
+  color: "#fff",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer",
+  fontSize: "18px",  // Increased font size
+};
 
+export default UserContribution;

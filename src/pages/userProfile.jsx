@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../UserContext'; // Import the context
 
+
 const UserProfile = () => {
   // Consume the context
   const { user, activeSessionsCount, source } = useContext(UserContext);
 
   if (!user) {
+    
     return <div>Loading...</div>; // Show loading while user data is fetched
   }
 
@@ -18,6 +20,8 @@ const UserProfile = () => {
       <p>Active Sessions: {activeSessionsCount}</p>
       <p>Source: {source}</p>
     </div>
+    
+    
   );
 };
 

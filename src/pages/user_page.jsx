@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from '../UserContext.jsx'; // Import the context where user data is stored
+import Footer from "../components/layout/footer.jsx";
 
 const Use = () => {
   const { user, activeSessionsCount, source } = useContext(UserContext); // Get user data from global state
@@ -87,6 +88,7 @@ const Use = () => {
           <strong>Source:</strong> {source || "Unknown"}
         </p>
       </div>
+      <Footer />
     </div>
   );
 };
